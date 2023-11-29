@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using api.Models;
 
 namespace api.Controllers;
 
@@ -6,11 +7,8 @@ namespace api.Controllers;
 [Route("[controller]")]
 public class EstacionamentoController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
+    private static readonly Estacionamento _estacionamento = new (100);
+    
     private readonly ILogger<EstacionamentoController> _logger;
 
     public EstacionamentoController(ILogger<EstacionamentoController> logger)
@@ -18,15 +16,21 @@ public class EstacionamentoController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult EstacionamentoCheio()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+
+        bool estacionamentoCheio;
+        
+        lock (_estacionamento)
+        {
+            estacionamentoCheio = _estacionamento.EstacionamentoCheio();
+        }
+
+        _logger.LogInformation($"Estacionamento cheio? -: {_estacionamento.EstacionamentoCheio()} | " +
+                               $"{DateTime.Now:HH:mm:ss}");
+
+        return Ok(estacionamentoCheio);
     }
 }
