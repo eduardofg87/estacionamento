@@ -27,27 +27,27 @@ public class Estacionamento
     }
 
     // Adiciona um veículo ao estacionamento
-    public string EstacionarVeiculo(Veiculo veiculo)
+    public bool EstacionarVeiculo(Veiculo veiculo)
     {
         if (VeiculoPodeEstacionar(veiculo))
         {
             _veiculosEstacionados.Add(veiculo);
             AtualizarContagemVagas(veiculo, true);
-            return $"{veiculo.Tipo} estacionado com sucesso!";
+            return true;
         }
-        return $"Não há vagas disponíveis para {veiculo.Tipo}.";
+        return false;
     }
 
     // Remove um veículo do estacionamento
-    public string RetirarVeiculo(Veiculo veiculo)
+    public bool RetirarVeiculo(Veiculo veiculo)
     {
         if (_veiculosEstacionados.Contains(veiculo))
         {
             _veiculosEstacionados.Remove(veiculo);
             AtualizarContagemVagas(veiculo, false);
-            return $"{veiculo.Tipo} retirado do estacionamento.";
-        } 
-        return $"{veiculo.Tipo} não encontrado no estacionamento.";
+            return true;
+        }
+        return false;
     }
 
     // Verifica se um veículo pode estacionar com base no tipo e disponibilidade de vagas
@@ -63,7 +63,7 @@ public class Estacionamento
         }
         if (veiculo is Van)
         {
-            return _vagasCarro + 3 <= _totalVagas;
+            return _vagasVan + 3 <= _totalVagas;
         }
         return false;
     }

@@ -23,6 +23,14 @@ Olá, candidato! Bem-vindo à sua entrevista. O boilerplate é fornecido. Sinta-
 Essas são apenas algumas orientações. Sinta-se à vontade para perguntar ao seu entrevistador sobre mais, conforme necessário
 
 
+## Resolução:
 
+Para resolver o desafio implementei uma API utilizando .Net Core 7 e fixei o total de vagas do estacionamento em 100 vagas
 
+Para alterar o total de vagas basta mudar a linha 13 do arquivo EstacinamentoController.cs
+```cs
+private static readonly Estacionamento _estacionamento = new (100);
+```
 
+Vemos na imagem abaixo o print da tela inicial da API (utilizando Swagger) com todas as rotas.
+![main page](swagger.png)
